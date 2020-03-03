@@ -1,0 +1,69 @@
+package edu.duke.ece651.SallyStash;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+
+public class Computer {
+  private ArrayList<String> actions;
+  private HashMap<Character, ArrayList<Character>> dirChoice;
+  private int height;
+  private int width;
+  private Random rand;
+
+  public Computer(int h, int w, ArrayList<String> act, HashMap<Character, ArrayList<Character>> dir) {
+    height = h;
+    width = w;
+    actions = act;
+    dirChoice = dir;
+    rand = new Random();
+  }
+
+  public String generatePos() {
+    int rand_row = rand.nextInt(height);
+    int ran_col = rand.nextInt(width);
+    String row = Character.toString('A' + rand_row);
+    String col = Integer.toString(ran_col);
+    return row + col;
+  }
+
+  public String generatePlace(char color) {
+    String res = generatePos();
+    int rand_dir = rand.nextInt(100);
+    String dir = "";
+    if (color == 'G' || color == 'P') {
+      if (rand_dir % 2 == 0) {
+        dir = "H";
+      } else {
+        dir = "V";
+      }
+    } else {
+      if(rand_dir < 25){
+        dir = "U";
+      }
+      else if(rand_dir < 50){
+        dir = "D";
+      }
+      else if(rand_dir< 75){
+        dir = "L";
+      }
+      else{
+        dir = "R";
+      }
+    }
+    res += dir;
+    return res;
+  }
+
+  public String generateAction() {
+    int rand_int = rand.nextInt(100);
+    if (rand_int < 50) {
+      return actions.get(0);
+    } else if (rand_int < 75) {
+      return actions.get(1);
+    } else {
+      return actions.get(2);
+    }
+  }
+
+}

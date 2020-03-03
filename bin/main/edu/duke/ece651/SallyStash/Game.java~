@@ -1,0 +1,137 @@
+package edu.duke.ece651.SallyStash;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Game {
+  private char[] playerNames = { 'A', 'B' };
+  private ArrayList<Player> Players;
+  private String[] colors = { "Green", "Purple", "Red", "Blue" };
+  private String[] Times = { "first", "second", "third" };
+  private int[] stackNums = { 1, 1, 1, 1 };
+  private int height = 20;
+  private int width = 10;
+
+  public Game() {
+    Players = new ArrayList<Player>();
+    for (int i = 0; i < 2; i++) {
+      Player newPlayer = new Player(playerNames[i], height, width);
+      Players.add(newPlayer);
+    }
+  }
+
+  private boolean inputValid(String in) {
+    if (!Character.isDigit(in.charAt(1))) {
+      return false;
+    } else if (!Character.isUpperCase(in.charAt(0)) || (int) (in.charAt(0) - 'A') >= height) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private String getUserInputPlace(Scanner scan) {
+    String place = scan.nextLine();
+    if (place.length() != 3) {
+      System.out.println("Invalid place input length, please try again.");
+      // scan.close();
+      return null;
+    } else if (place.charAt(2) != 'V' && place.charAt(2) != 'H') {
+      System.out.println(place.charAt(2));
+      System.out.println("Invalid place input (V/H), please try again.");
+      // scan.close();
+      return null;
+    } else if (!inputValid(place)) {
+      System.out.println("Invalid place input, please try again.");
+      // scan.close();
+      return null;
+    } else {
+      // scan.close();
+      return place;
+    }
+  }
+
+  private boolean placeStack(Player p, String place, char type) {
+    char dir = place.charAt(2);
+    int row = (int) (place.charAt(0) - 'A');
+    int col = (int) (place.charAt(1) - '0');
+    return p.place(type, dir, row, col);
+  }
+
+  private void openPlace(Scanner scan) {
+    for (int i = 0; i < 2; i++) {
+      System.out.print("Player " + playerNames[i]
+          + ", you are going place Sally’s stash on the board. Make sure Player " + playerNames[(i + 1) % 2]
+          + " isn’t looking!  For  each  stack,  type  the  coordinate  of  the  upper  left  side  of  the  stash, followed  by  either  H  (for  horizontal)  or  V  (for  vertical).  For  example,  M4H  would place a stackhorizontally starting at M4 and going to the right.You have \n");
+      System.out.println("2 Greenstacks that are 1x2");
+      System.out.println("3 Purple stacks that are 1x3");
+      System.out.println("3 Red stacks that are 1x4");
+      System.out.println("2 Blue stacks that are 1x6");
+      for (int j = 0; j < 4; j++) {
+        int k = 0;
+        while (k < stackNums[j]) {
+          Players.get(i).printBoard();
+          System.out.println(
+              "Player " + playerNames[i] + ", where do you want to place the " + Times[k] + " " + colors[j] + "stack?");
+          String place = getUserInputPlace(scan);
+          if (place != null) {
+            if (placeStack(Players.get(i), place, colors[j].charAt(0))) {
+              k += 1;
+            } else {
+              System.out.println("Can't place stack, please try again.");
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private String getUserInputDig(Scanner scan) {
+    String dig = scan.nextLine();
+    if (dig.length() != 2) {
+      System.out.println("Invalid dig input length, please try again.");
+      return null;
+    } else if (!inputValid(dig)) {
+      System.out.println("Invalid place input, please try again.");
+      return null;
+    } else {
+      return dig;
+    }
+  }
+
+  private void checkUpdateDig(int playerNum, String dig){
+    int row = (int) (dig.charAt(0) - 'A');
+    int col = (int) (dig.charAt(1) - '0');
+    char res = Players.get((playerNum + 1) % 2).check(row, col);
+    Players.get(playerNum).update(res,row,col);
+  }
+
+  private void digEachOther(Scanner scan) {
+    while (true) {
+      for (int i = 0; i < 2; i++) {
+        Players.get(i).printBoard();
+        System.out.println("Player " + playerNames[i] + ", where do you want to dig?");
+        int j = 0;
+        while (j < 1) {
+          String dig = getUserInputDig(scan);
+          if (dig != null) {
+            checkUpdateDig(i, dig);
+            j += 1;
+          }
+        }
+      }
+    }
+  }
+
+  public void Play() {
+    Scanner scan = new Scanner(System.in);
+    openPlace(scan);
+    digEachOther(scan);
+    scan.close();
+  }
+
+  public static void main(String[] args) {
+    Game g = new Game();
+    g.Play();
+  }
+}

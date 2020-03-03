@@ -1,0 +1,58 @@
+package edu.duke.ece651.SallyStash;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Board {
+  
+  private char[][] board;
+  private ArrayList<Stack> stacks;
+  private HashMap<ArrayList<Integer>,Boolean> coorStates;
+  private int height;
+  private int width;
+
+  public Board(int h, int w) {
+    board = new char[h][w];
+    stacks = new ArrayList<Stack>();
+    coorStates = new HashMap<ArrayList<Integer>, Boolean>();
+    height = h;
+    width = w;
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        board[i][j] = ' ';
+      }
+    }
+  }
+
+  public int getHeight(){
+    return height;
+  }
+
+  public int getWidth(){
+    return width;
+  }
+
+  public char[][] getBoard(){
+    return board;
+  }
+
+  public boolean tryAddBlock(Stack toAdd){
+    for(ArrayList<Integer> block : toAdd.getBlocks()){
+      if (block.get(0) >= 0 && block.get(0) < height && block.get(1) >= 0 && block.get(1) < width) {
+        if (board[block.get(0)][block.get(1)] != ' ') {
+          return false;
+        }
+      }
+      else{
+        return false;
+      }
+    }
+    
+    for(ArrayList<Integer> block : toAdd.getBlocks()){
+      board[block.get(0)][block.get(1)] = toAdd.getType();
+      }
+    stacks.add(toAdd);
+    return true;
+  }
+
+}

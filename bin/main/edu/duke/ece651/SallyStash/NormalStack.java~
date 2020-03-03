@@ -1,0 +1,49 @@
+package edu.duke.ece651.SallyStash;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class NormalStack implements Stack {
+  private ArrayList<ArrayList<Integer>> blocks;
+  private char type;
+  private char dir;
+  
+  private void createBlocks(int r, int c){
+    int l = TypeInfo.get(type);
+    int row = r;
+    int col = c;
+    for(int i = 0; i < l; i++){
+      ArrayList<Integer> newBlock = new ArrayList<Integer>();
+      newBlock.add(row);
+      newBlock.add(col);
+      newBlock.add(0);
+      blocks.add(newBlock);
+      if (dir == 'H'){
+        col += 1;
+      }
+      else{
+        row += 1;
+      }
+    }
+  }
+  
+   public NormalStack(char ptype, char pdir, int row, int col){
+    type = ptype;
+    dir = pdir;
+    blocks = new ArrayList<ArrayList<Integer>>();
+    createBlocks(row, col);
+  }
+
+  public ArrayList<ArrayList<Integer>> getBlocks(){
+    return blocks;
+  }
+  
+  public char getType(){
+    return type;
+  }
+  
+   public boolean update (ArrayList<Integer> coor){
+     return true;
+  }
+  
+}

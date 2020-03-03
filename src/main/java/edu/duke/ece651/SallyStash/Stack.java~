@@ -1,0 +1,9 @@
+package edu.duke.ece651.SallyStash;
+
+import java.util.ArrayList;
+
+interface Stack {
+  public boolean update(ArrayList<Integer> coordinate);
+  public ArrayList<ArrayList<Integer>> getBlocks();
+  public char getType();
+}

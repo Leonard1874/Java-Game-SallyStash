@@ -1,0 +1,29 @@
+package edu.duke.ece651.SallyStash;
+
+public class Player {
+  private Board myBoard;
+  private Board otherBoard;
+  private char Name;
+  private StackFactory myFactory;
+  private Printer myPrinter;
+  public Player(char pname, int h, int w){
+    Name = pname;
+    myBoard = new Board(h, w);
+    otherBoard = new Board(h, w);
+    myFactory = new StackFactory();
+    myPrinter = new Printer();
+  }
+
+  public void printBoard(){
+    myPrinter.printBoard(myBoard,otherBoard);
+  }
+
+  public boolean place(char type, char dir, int row, int col){
+    Stack toPlace = myFactory.getStack(type, dir, row, col);
+    if(!myBoard.tryAddBlock(toPlace)){
+      return false;
+    }
+    return true;
+  }
+
+}

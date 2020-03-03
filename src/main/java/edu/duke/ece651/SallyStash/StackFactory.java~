@@ -1,0 +1,26 @@
+package edu.duke.ece651.SallyStash;
+
+public class StackFactory {
+  private HashMap<Character, Integer> TypeInfo = new HashMap<Character, Integer>() {
+    {
+      put('R', 4);
+      put('B', 2);
+      put('G', 5);
+      put('P', 3);
+}};
+  
+  // use getSTACK method to get object of type stack
+  public Stack getStack(char stackType, char dir, int row, int col) {
+    if (stackType == 'R') {
+      return new NormalStack(stackType, dir, row, col);
+    } else if (stackType == 'G') {
+      return new NormalStack(stackType, dir, row, col);
+    } else if (stackType == 'P') {
+      return new NormalStack(stackType, dir, row, col);
+    } else if (stackType == 'B') {
+      return new NormalStack(stackType, dir, row, col);
+    } else {
+      return null;
+    }
+  }
+}
